@@ -26,3 +26,6 @@ Install the package
 pip install -r requirements.txt
 pip install .
 ```
+
+## GitHub Actions
+This project uses GitHub Actions for continuous integration. The workflow is defined in `.github/workflows/deploy.yml`. The action runs the `nbody.py` script and produces plots for the simulation results. The plots are then uploaded as artifacts for each run here: https://sahiljhawar.in/nbody/
