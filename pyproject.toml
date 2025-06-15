@@ -1,0 +1,9 @@
+[build-system]
+requires = ["scikit-build-core", "pybind11"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "nbody_cpp"
+version = "0.1.0"
+authors = [{ name = "Sahil Jhawar", email = "sahil.jhawar448@gmail.com" }]
+requires-python = ">=3.11"
