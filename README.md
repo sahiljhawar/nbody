@@ -26,6 +26,3 @@ Install the package
 pip install -r requirements.txt
 pip install .
 ```
-
-
-write github action to run the script which creates the movie for multiple configurations and post the video on my website as sahiljhawar.in/nbody/
