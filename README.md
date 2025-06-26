@@ -29,7 +29,7 @@ pip install .
 ## Usage
 To run the simulation, use the following command:
 ```bash
-export BACKEND=cpp # or jax
+export NBODY_BACKEND=cpp # or jax
 python nbody.py
 ```
 
