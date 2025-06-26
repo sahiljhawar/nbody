@@ -26,8 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install .
 
-      - name: Run nbody.py
-        run: python nbody.py
+      - name: Run nbody.py with cpp backend
+        run: export NBODY_BACKEND=cpp; python nbody.py
+
+      - name: Run nbody.py with jax backend
+        run: export NBODY_BACKEND=jax; python nbody.py
 
       - name: Generate index.html for image browsing
         run: python make_html.py
