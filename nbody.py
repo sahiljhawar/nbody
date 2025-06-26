@@ -9,7 +9,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
 from p_tqdm import p_map
-import nbody_cpp
+
+sys.path.append("build/")
+# import nbody_cpp
+
+import nbody_jax as nbody_cpp
 
 
 logging.getLogger("imageio_ffmpeg").setLevel(logging.ERROR)
