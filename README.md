@@ -1,6 +1,6 @@
 # Direct N-body Simulation
 
-This project implements a direct N-body simulation using C++ and Python. This project is developed as my submission for the role of Software Engineer at Leiden University.
+This project implements a direct N-body simulation using C++ or JAX as computing backend and Python. This project is developed as my submission for the role of Software Engineer at Leiden University.
 
 
 ## Installation
@@ -25,6 +25,12 @@ Install the package
 ```bash
 pip install -r requirements.txt
 pip install .
+```
+## Usage
+To run the simulation, use the following command:
+```bash
+export BACKEND=cpp # or jax
+python nbody.py
 ```
 
 ## GitHub Actions
