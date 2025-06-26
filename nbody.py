@@ -1,22 +1,15 @@
 import os
+import sys
 import shutil
-import logging
 from pathlib import Path
 import time
 from typing import Iterable
+import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
 from p_tqdm import p_map
-
-sys.path.append("build/")
-# import nbody_cpp
-
-import nbody_jax as nbody_cpp
-
-
-logging.getLogger("imageio_ffmpeg").setLevel(logging.ERROR)
 
 # plt.rcParams["text.usetex"] = True # Quite slow, but enables LaTeX rendering
 
@@ -40,6 +33,29 @@ tomato = "#D5120D"
 COLOR_ARRAY = [blue, orange, red, teal, deep_blue, brown, tomato]
 
 
+BACKEND = os.getenv("NBODY_BACKEND", None)
+
+if BACKEND is None:
+    warnings.warn("`NBODY_BACKEND` environment variable not set, defaulting to `cpp`.")
+    BACKEND = "cpp"
+
+if BACKEND == "cpp":
+    try:
+        sys.path.append("build/")
+        import nbody_cpp as nbody
+        print("Using C++ backend")
+    except ImportError:
+        print("C++ backend not available, falling back to JAX")
+        BACKEND = "jax"
+
+if BACKEND == "jax":
+    try:
+        import nbody_jax as nbody
+        print("Using JAX backend")
+    except ImportError:
+        raise ImportError("Neither C++ nor JAX backend is available")
+
+
 class NBodyWrapper:
     """
     Python wrapper for the C++ N-body simulation with additional functionality.
@@ -57,8 +73,8 @@ class NBodyWrapper:
 
     Attributes
     ----------
-    sim : nbody_cpp.NBodySimulation
-        The underlying C++ simulation object.
+    sim : nbody.NBodySimulation
+        The underlying C++ or JAX simulation object.
     """
 
     def __init__(
@@ -68,7 +84,7 @@ class NBodyWrapper:
         velocities: Iterable[Iterable[float]],
         G: float = 1.0,
     ) -> None:
-        self.sim = nbody_cpp.NBodySimulation(masses, positions, velocities, G)
+        self.sim = nbody.NBodySimulation(masses, positions, velocities, G)
 
     def simulate(self, t_end: float, dt: float, verbose: bool = True) -> None:
         """
@@ -316,12 +332,16 @@ def binary_system():
     plot_trajectories(
         sim,
         title="Binary System Trajectories",
-        save_fig="images/binary_system_trajectories.png",
+        save_fig=f"images/binary_system_trajectories_{BACKEND}.png",
     )
     xlim = None
     ylim = None
     create_animation(
-        sim, xlim, ylim, 50, save_animation="images/binary_system_animation.mp4"
+        sim,
+        xlim,
+        ylim,
+        50,
+        save_animation=f"images/binary_system_animation_{BACKEND}.mp4",
     )
 
 
@@ -355,7 +375,7 @@ def nbody_system():
     plot_trajectories(
         sim,
         title=f"{len(masses)}-Body System Trajectories",
-        save_fig=f"images/{len(masses)}_body_system_trajectories.png",
+        save_fig=f"images/{len(masses)}_body_system_trajectories_{BACKEND}.png",
     )
 
     xlim = [-20, 20]
@@ -366,14 +386,14 @@ def nbody_system():
         xlim,
         ylim,
         50,
-        save_animation=f"images/{len(masses)}_body_system_animation.mp4",
+        save_animation=f"images/{len(masses)}_body_system_animation_{BACKEND}.mp4",
     )
 
 
 def main():
     Path("images").mkdir(exist_ok=True)
 
-    print("=== C++ N-Body Simulation ===\n")
+    print("=== N-Body Simulation ===\n")
     print("\n=== Binary System Simulation ===\n")
     binary_system()
     print()
