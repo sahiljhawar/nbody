@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> I am rejected for the position. However, if anyone reading this, please hire me, I am still available for work.
+
 # Direct N-body Simulation
 
 This project implements a direct N-body simulation using C++ or JAX as computing backend and Python. This project is developed as my submission for the role of Software Engineer at Leiden University.
